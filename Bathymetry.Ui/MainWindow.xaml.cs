@@ -23,35 +23,12 @@ namespace Bathymetry.Ui
 
         public MainWindow()
         {
-            InitializeComponent();
+            InitializeComponent();           
 
-            //setup our DI
-            var serviceProvider = new ServiceCollection()
-                .AddLogging(/*logging => logging.AddConsole()*/)
-                //.AddSingleton<SerialPort>(CreateSerialPort("COM6"))
-                //.AddSingleton<IReadingProvider, SerialReadingProvider>()
-                .AddSingleton<NMEA0183Parser>()
-                .AddSingleton<ReadingParser>()
-                .AddSingleton<IReadingProvider, SimulatedReadingProvider>()
-                .BuildServiceProvider();
-
-            //do the actual work here
-            _provider = serviceProvider.GetService<IReadingProvider>();
-            _parser = serviceProvider.GetService<ReadingParser>();
+            _provider = App.ServiceProvider.GetService<IReadingProvider>();
+            _parser = App.ServiceProvider.GetService<ReadingParser>();
 
             _provider.OnReadingRecieved += DataRecieved;
-
-        }
-
-        private SerialPort CreateSerialPort(string comPort)
-        {
-            return new SerialPort(comPort)
-            {
-                BaudRate = 9600,
-                Parity = Parity.None,
-                StopBits = StopBits.One,
-                DataBits = 8
-            };
         }
 
         private void DataRecieved(object sender, string recievedText)
@@ -88,14 +65,15 @@ namespace Bathymetry.Ui
         {
             WriteOutData();
 
-            System.Diagnostics.Process.Start("Html\\Viewer.html");
+            if (File.Exists("Html\\Viewer.html"))
+            {
+                System.Diagnostics.Process.Start("Html\\Viewer.html");
+            }
         }
 
         private void WriteOutData()
         {
             var sb = new StringBuilder();
-
-            //sb.AppendLine("latitude,latitude,f1,f2");
 
             foreach(var reading in readings)
             {
