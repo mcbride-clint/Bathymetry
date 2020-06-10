@@ -1,7 +1,7 @@
 ﻿using Bathymetry.Data;
 using Bathymetry.Data.Models;
 using Bathymetry.Data.Providers;
-using DotnetNMEA.NMEA0183;
+using Boyd.NMEA.NMEA.Types;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Concurrent;
 using System.IO;

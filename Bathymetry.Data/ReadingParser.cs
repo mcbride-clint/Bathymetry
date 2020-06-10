@@ -1,10 +1,8 @@
 ﻿using Bathymetry.Data.Models;
-using DotnetNMEA.NMEA0183;
-using DotnetNMEA.NMEA0183.Messages;
+using Boyd.NMEA.NMEA;
+using Boyd.NMEA.NMEA.Messages;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Bathymetry.Data
 {

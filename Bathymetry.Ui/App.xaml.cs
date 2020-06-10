@@ -1,15 +1,8 @@
 ﻿using Bathymetry.Data;
 using Bathymetry.Data.Providers;
-using DotnetNMEA.NMEA0183;
+using Boyd.NMEA.NMEA;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Configuration;
-using System.Data;
 using System.IO.Ports;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Bathymetry.Ui

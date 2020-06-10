@@ -1,4 +1,4 @@
-﻿using DotnetNMEA.NMEA0183.Messages;
+﻿using Boyd.NMEA.NMEA.Messages;
 using System.Collections.Generic;
 using System.Text;
 

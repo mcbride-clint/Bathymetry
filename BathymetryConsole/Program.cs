@@ -1,11 +1,9 @@
 ﻿using Bathymetry.Data;
 using Bathymetry.Data.Providers;
-using DotnetNMEA.NMEA0183;
+using Boyd.NMEA.NMEA;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Data.Common;
 using System.IO.Ports;
 
 namespace BathymetryConsole
