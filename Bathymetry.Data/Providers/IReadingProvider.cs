@@ -4,7 +4,7 @@ namespace Bathymetry.Data.Providers
 {
     public interface IReadingProvider
     {
-        bool IsStarted { get; set; }
+        bool IsStarted { get; }
 
         event EventHandler<string> OnReadingRecieved;
 

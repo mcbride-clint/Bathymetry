@@ -10,7 +10,6 @@ namespace Bathymetry.Data.Providers
         public bool IsStarted
         {
             get => _serialPort.IsOpen;
-            set => throw new NotImplementedException();
         }
 
         public SerialReadingProvider(SerialPort serialPort)

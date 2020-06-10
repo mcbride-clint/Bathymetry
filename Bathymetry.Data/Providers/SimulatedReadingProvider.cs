@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
-using System.Security.Cryptography;
 using System.Timers;
 
 namespace Bathymetry.Data.Providers
@@ -49,7 +48,7 @@ namespace Bathymetry.Data.Providers
         {
             var rand = new Random();
             var f1 = Math.Round(rand.NextDouble() + 10, 1);
-            var f2 = Math.Round(rand.NextDouble() + 12, 1);
+            var f2 = Math.Round(rand.NextDouble() + 16, 1);
 
             // TODO Vary Lat and Longitude
             var latitude = Math.Round(rand.NextDouble() * 10 + 4000, 6);

@@ -3,13 +3,11 @@ using Bathymetry.Data.Models;
 using Bathymetry.Data.Providers;
 using DotnetNMEA.NMEA0183;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Collections.Concurrent;
+using System.IO;
 using System.IO.Ports;
-using System.Linq;
+using System.Text;
 using System.Windows;
-using System.Windows.Media.Media3D;
-using WPFSurfacePlot3D;
 
 namespace Bathymetry.Ui
 {
@@ -88,14 +86,23 @@ namespace Bathymetry.Ui
 
         private void Open3dButton_Click(object sender, RoutedEventArgs e)
         {
-            var viewer = new Viewer();
+            WriteOutData();
 
-            var point3DList = readings
-                .Select(r => new Point3D((double)r.Location.Latitude, (double)r.Location.Longitude, (double)r.Depth.F1));
+            System.Diagnostics.Process.Start("Html\\Viewer.html");
+        }
 
-            viewer.LoadData(point3DList.ToArray());
+        private void WriteOutData()
+        {
+            var sb = new StringBuilder();
 
-            viewer.Show();
+            //sb.AppendLine("latitude,latitude,f1,f2");
+
+            foreach(var reading in readings)
+            {
+                sb.AppendLine($"{reading.Location.Latitude},{reading.Location.Longitude},{reading.Depth.F1},{reading.Depth.F2}");
+            }
+
+            File.WriteAllText("Html\\data.csv", sb.ToString());
         }
     }
 }
