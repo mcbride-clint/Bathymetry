@@ -7,9 +7,10 @@ namespace Bathymetry.Data.Providers
     {
         private readonly SerialPort _serialPort;
 
-        public bool IsStarted {
+        public bool IsStarted
+        {
             get => _serialPort.IsOpen;
-            set => throw new NotImplementedException(); 
+            set => throw new NotImplementedException();
         }
 
         public SerialReadingProvider(SerialPort serialPort)
@@ -27,7 +28,6 @@ namespace Bathymetry.Data.Providers
             }
 
             _serialPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
-
             _serialPort.Open();
         }
 
@@ -36,12 +36,24 @@ namespace Bathymetry.Data.Providers
             _serialPort.Close();
         }
 
+        string bufferedText = "";
+        int readLines = 0;
+
         private void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
         {
             SerialPort sp = (SerialPort)sender;
-            string indata = sp.ReadExisting();
+            lock (bufferedText)
+            {
+                bufferedText += sp.ReadLine();
+                readLines++;
 
-            OnReadingRecieved?.Invoke(null, indata);
+                if (readLines == 2)
+                {
+                    OnReadingRecieved?.Invoke(null, bufferedText);
+                    bufferedText = "";
+                    readLines = 0;
+                }
+            }
         }
 
         public void Dispose()

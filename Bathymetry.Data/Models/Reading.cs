@@ -8,6 +8,7 @@ namespace Bathymetry.Data.Models
     {
         public DepthInfo Depth { get; set; }
         public GGAMessage Location { get; set; }
+        public bool IsValid => (Depth != null && Location != null);
 
         public override string ToString()
         {

@@ -2,15 +2,14 @@
 using Bathymetry.Data.Models;
 using Bathymetry.Data.Providers;
 using DotnetNMEA.NMEA0183;
-using LiveCharts;
-using LiveCharts.Defaults;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Concurrent;
-using System.Collections.ObjectModel;
 using System.IO.Ports;
+using System.Linq;
 using System.Windows;
 using System.Windows.Media.Media3D;
+using WPFSurfacePlot3D;
 
 namespace Bathymetry.Ui
 {
@@ -21,9 +20,8 @@ namespace Bathymetry.Ui
     {
         private static ReadingParser _parser;
         private IReadingProvider _provider;
-        public ObservableCollection<ChartViewModel> F1Values = new ObservableCollection<ChartViewModel>();
 
-
+        private ConcurrentBag<Reading> readings = new ConcurrentBag<Reading>();
 
         public MainWindow()
         {
@@ -32,7 +30,7 @@ namespace Bathymetry.Ui
             //setup our DI
             var serviceProvider = new ServiceCollection()
                 .AddLogging(/*logging => logging.AddConsole()*/)
-                //.AddSingleton<SerialPort>(CreateSerialPort("COM4"))
+                //.AddSingleton<SerialPort>(CreateSerialPort("COM6"))
                 //.AddSingleton<IReadingProvider, SerialReadingProvider>()
                 .AddSingleton<NMEA0183Parser>()
                 .AddSingleton<ReadingParser>()
@@ -45,7 +43,6 @@ namespace Bathymetry.Ui
 
             _provider.OnReadingRecieved += DataRecieved;
 
-            Series.DataContext = F1Values;
         }
 
         private SerialPort CreateSerialPort(string comPort)
@@ -63,13 +60,16 @@ namespace Bathymetry.Ui
         {
             var data = _parser.Parse(recievedText);
 
-            var f1Point = new ChartViewModel();
-            f1Point.Longitude = data.Location.Longitude;
-            f1Point.Latitude = data.Location.Latitude;
-           
+            if (!data.IsValid)
+            {
+                return;
+            }
+
+            readings.Add(data);
+
             Dispatcher.Invoke(() =>
             {
-                F1Values.Add(f1Point);
+                
                 OutputStream.Text = data.ToString() + OutputStream.Text;
             });
         }
@@ -84,7 +84,18 @@ namespace Bathymetry.Ui
             {
                 _provider.Start();
             }
+        }
 
+        private void Open3dButton_Click(object sender, RoutedEventArgs e)
+        {
+            var viewer = new Viewer();
+
+            var point3DList = readings
+                .Select(r => new Point3D((double)r.Location.Latitude, (double)r.Location.Longitude, (double)r.Depth.F1));
+
+            viewer.LoadData(point3DList.ToArray());
+
+            viewer.Show();
         }
     }
 }

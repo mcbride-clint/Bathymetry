@@ -3,6 +3,7 @@ using DotnetNMEA.NMEA0183;
 using DotnetNMEA.NMEA0183.Messages;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Bathymetry.Data
@@ -24,18 +25,28 @@ namespace Bathymetry.Data
         public bool HasF2 { get; set; }
         public Reading Parse(string inputText)
         {
-            var lines = inputText.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+            var lines = inputText.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
 
             var reading = new Reading();
 
-            if (HasGps)
+            if (lines.Count == 2)
             {
-                reading.Location = (GGAMessage)ParseGps(lines[0]);
-                reading.Depth = ParseReading(lines[1]);
-            } 
+                foreach (var line in lines)
+                {
+                    if (line.StartsWith("$GPGGA"))
+                    {
+                        reading.Location = (GGAMessage)ParseGps(line);
+                    }
+                    else
+                    {
+                        reading.Depth = ParseReading(line);
+
+                    }
+                }
+            }
             else
             {
-                reading.Depth = ParseReading(lines[0]);
+                // Bad Line
             }
 
             return reading;
@@ -44,7 +55,7 @@ namespace Bathymetry.Data
         private DepthInfo ParseReading(string readingLine)
         {
             var info = new DepthInfo();
-           
+
             var parts = readingLine.Split(',');
 
             info.F1 = decimal.Parse(parts[3]);
