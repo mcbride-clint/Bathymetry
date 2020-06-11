@@ -4,13 +4,134 @@
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:local="clr-namespace:Bathymetry.Ui"
+        xmlns:DV="clr-namespace:System.Windows.Controls.DataVisualization;assembly=System.Windows.Controls.DataVisualization.Toolkit"  
+        xmlns:DVC="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit" 
 		mc:Ignorable="d"
-		Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <DockPanel>
-            <Button x:Name="StartStopButton" Click="StartStopButton_Click">Start / Stop</Button>
-            <Button x:Name="Open3dButton" Click="Open3dButton_Click">Show 3D View</Button>
-            <TextBlock x:Name="OutputStream" ></TextBlock>
-        </DockPanel>
-    </Grid>
+		Title="MainWindow" Height="450" Width="800"        
+        Background="Black">
+
+    <Window.Resources>
+        <DataTemplate x:Key="Reading">
+            <Border CornerRadius="6"
+                BorderBrush="Gray"
+                Background="LightGray"
+                BorderThickness="2"
+                Padding="8">
+                <StackPanel Orientation="Horizontal">
+                    <DockPanel MinWidth="50" Height="50" >
+                        <TextBlock Text="{Binding RecordNumber}"
+                               FontSize="35"
+                               HorizontalAlignment="Center" 
+                               VerticalAlignment="Center" 
+                               TextAlignment="Center"/>
+                    </DockPanel>
+                    <DockPanel>
+                        <StackPanel Margin="0 0 5 0">
+                            <TextBlock FontSize="18" Text="F1"/>
+                            <TextBlock FontSize="18" Text="F2"/>
+                        </StackPanel>
+                        <StackPanel Margin="0 0 5 0">
+                            <TextBlock FontSize="18" Text="{Binding Depth.F1}"/>
+                            <TextBlock FontSize="18" Text="{Binding Depth.F2}"/>
+                        </StackPanel>
+                        <StackPanel Margin="0 0 15 0">
+                            <TextBlock FontSize="18" Text="{Binding Depth.Unit}"/>
+                            <TextBlock FontSize="18" Text="{Binding Depth.Unit}"/>
+                        </StackPanel>
+                        <StackPanel >
+                            <TextBlock Text="{Binding LatitudeAsString}"/>
+                            <TextBlock Text=" "/>
+                            <TextBlock Text="{Binding LongitudeAsString}"/>
+                        </StackPanel>
+                    </DockPanel>
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+    </Window.Resources>
+
+    <DockPanel>
+        <StackPanel MaxWidth="100" MinWidth="80">
+            <Button x:Name="StartStopButton" 
+                    Click="StartStopButton_Click" 
+                    Height="75"
+                    Padding="5"                    
+                    Margin="5">
+                <TextBlock x:Name="StartStopText" TextWrapping="Wrap" TextAlignment="Center">
+                    Start Recording
+                </TextBlock>
+            </Button>
+            <Button x:Name="Open3dButton"
+                    Click="Open3dButton_Click" 
+                    Height="75"
+                    Margin="5">Show 3D View</Button>
+            <TextBlock Foreground="White" 
+                       Margin="5 0 5 0">
+                Autosave Every:
+            </TextBlock>
+            <TextBox x:Name="AutosaveCount" 
+                     Text="10" 
+                     Margin="5 0 5 5"
+                     PreviewTextInput="AutosaveCount_PreviewTextInput"></TextBox>
+            <Button x:Name="SaveDataButton"
+                    Click="SaveDataButton_Click" 
+                    Height="75"
+                    Margin="5">Save Data</Button>
+        </StackPanel>
+
+        <TabControl>
+            <TabItem Header="Recent Readings">
+                <DVC:Chart>
+                    <DVC:Chart.Axes>
+                        <DVC:LinearAxis Orientation="X" FontSize="10" ShowGridLines="True" Title="Record Number"/>
+                        <DVC:LinearAxis Orientation="Y" Maximum="0" FontSize="10" ShowGridLines="True" Title="Depth (Feet)"/>
+                    </DVC:Chart.Axes>
+                    <DVC:Chart.Series>
+                        <DVC:LineSeries x:Name="F1Plot"
+                                        Title="F1"
+                                        IndependentValueBinding="{Binding Path=RecordNumber}" 
+                                        DependentValueBinding="{Binding Path=F1Depth}" />
+                        <DVC:LineSeries x:Name="F2Plot" 
+                                        Title="F1"
+                                        IndependentValueBinding="{Binding Path=RecordNumber}" 
+                                        DependentValueBinding="{Binding Path=F2Depth}" />
+                    </DVC:Chart.Series>
+                </DVC:Chart>
+            </TabItem>
+            <TabItem Header="Data Readings">
+                <DockPanel>
+                    <CheckBox x:Name="AutoScroll" 
+                              DockPanel.Dock="Top"
+                              IsChecked="True">
+                        Auto-Scroll to Latest
+                    </CheckBox>
+
+                    <ListBox x:Name="ReadingListBox" ItemTemplate="{StaticResource Reading}" IsSynchronizedWithCurrentItem="True" >
+                        <!--<ListBox.ItemTemplate>
+                        <DataTemplate DataType="">
+                            <Grid>
+                                <Label Content="{Binding}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>-->
+                    </ListBox>
+                </DockPanel>
+            </TabItem>
+            <TabItem Header="Location Plot">
+                <DVC:Chart>
+                    <DVC:Chart.Axes>
+                        <DVC:LinearAxis Orientation="X" FontSize="10" ShowGridLines="True" Title="Latitude"/>
+                        <DVC:LinearAxis Orientation="Y" FontSize="10" ShowGridLines="True" Title="Longitude"/>
+                    </DVC:Chart.Axes>
+                    <DVC:Chart.Series>
+                        <DVC:ScatterSeries x:Name="ScatterPlot"
+                                           Title="Record Location"
+                                           IndependentValueBinding="{Binding Path=Latitude}"
+                                           DependentValueBinding="{Binding Path=Longitude}">
+
+                        </DVC:ScatterSeries>
+                    </DVC:Chart.Series>
+                </DVC:Chart>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
 </Window>
