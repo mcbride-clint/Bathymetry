@@ -110,7 +110,7 @@
                                         IndependentValueBinding="{Binding Path=RecordNumber}" 
                                         DependentValueBinding="{Binding Path=F1Depth}" />
                         <DVC:LineSeries x:Name="F2Plot" 
-                                        Title="F1"
+                                        Title="F2"
                                         IndependentValueBinding="{Binding Path=RecordNumber}" 
                                         DependentValueBinding="{Binding Path=F2Depth}" />
                     </DVC:Chart.Series>

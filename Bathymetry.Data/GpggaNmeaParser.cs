@@ -1,16 +1,21 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Globalization;
 
 namespace Bathymetry.Data
 {
     public class GpggaNmeaParser
     {
+        private readonly ILogger<GpggaNmeaParser> _logger;
+
+        public GpggaNmeaParser(ILogger<GpggaNmeaParser> logger)
+        {
+            _logger = logger;
+        }
+
         public GGAMessage Parse(string gpggaLine)
         {
             var message = gpggaLine.Split(',');
-
-            if (message == null || message.Length < 14)
-                throw new ArgumentException("Invalid GGA", "message");
 
             try
             {
@@ -30,7 +35,8 @@ namespace Bathymetry.Data
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error Parsing GPS Data: {gpggaLine}", ex);
+                _logger.LogError($"Error Parsing GPS Data: {gpggaLine}", ex);
+                return null;
             }
         }
 

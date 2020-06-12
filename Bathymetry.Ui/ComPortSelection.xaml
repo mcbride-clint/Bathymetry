@@ -16,10 +16,10 @@
             <StackPanel>
                 <TextBlock Foreground="White" FontWeight="Bold">Searching for incoming data on Port:</TextBlock>
                 <TextBlock x:Name="StatusLabel" Foreground="White" HorizontalAlignment="Center" TextAlignment="Center" ></TextBlock>
-                <TextBlock Foreground="White" VerticalAlignment="Center" x:Name="DataExampleLabel"></TextBlock>
+                <TextBlock Foreground="White" VerticalAlignment="Center" x:Name="DataExampleLabel" TextWrapping="Wrap"></TextBlock>
             </StackPanel>
             <StackPanel Grid.Row="1">
-                <Button x:Name="AddSerialPortButton" Click="AddSerialPortButton_Click" Margin="5" IsEnabled="False">Use this Port</Button>
+                <Button x:Name="AddSerialPortButton" Click="AddSerialPortButton_Click" Margin="5">Use this Port</Button>
                 <Button x:Name="AddSimulatedButton"
                         Click="AddSimulatedButton_Click" 
                         Margin="5" >

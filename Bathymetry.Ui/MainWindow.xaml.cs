@@ -58,8 +58,9 @@ namespace Bathymetry.Ui
         {
             var data = _parser.Parse(recievedText);
 
-            if (data.IsValid)
-                Dispatcher.InvokeAsync(() => UpdateUIWithReading(data));
+            if (data.InCorrectFormat)
+                if (data.DepthReadingValid)
+                    Dispatcher.InvokeAsync(() => UpdateUIWithReading(data));
         }
 
         private void UpdateUIWithReading(Reading data)
@@ -142,7 +143,7 @@ namespace Bathymetry.Ui
 
             foreach (var reading in readings)
             {
-                sb.AppendLine($"{reading.Location.Latitude},{reading.Location.Longitude},{reading.Depth.F1},{reading.Depth.F2}");
+                sb.AppendLine($"{reading.Location.Latitude},{reading.Location.Longitude},{reading.F1Depth},{reading.F2Depth}");
             }
 
             File.WriteAllText(Save3DFileLocation, sb.ToString());

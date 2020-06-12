@@ -17,24 +17,24 @@ namespace Bathymetry.Ui
         public Com_Port_Selection()
         {
             InitializeComponent();
-
+            AddSerialPortButton.IsEnabled = false;
             SearchForPort();
         }
 
         private void SearchForPort()
-        {
+        { 
             UpdateStatusLabel("Searching...");
 
             AvailablePortNames = SerialPort.GetPortNames().ToList();
 
             foreach (var portName in AvailablePortNames)
             {
-                UpdateStatusLabel(portName);
-                if (CheckComPortForData("Searching: " + portName))
+                UpdateStatusLabel("Searching: " + portName);
+                if (CheckComPortForData(portName))
                 {
                     UpdateStatusLabel($"Found Bathymetry System on {portName}");
                     MatchedPortName = portName;
-                    AddSerialPortButton.IsEnabled = true;
+                    Dispatcher.Invoke(() => AddSerialPortButton.IsEnabled = true);
                     return;
                 }
             }
@@ -82,7 +82,7 @@ namespace Bathymetry.Ui
                 serialPort.Open();
                 var textLine = serialPort.ReadLine();
 
-                if (textLine == "$GPGGA" || textLine.StartsWith("$PIST"))
+                if (textLine.StartsWith("$GPGGA") || textLine.StartsWith("$PIST"))
                 {
                     UpdateDataExampleLabel(textLine);
                     return true;

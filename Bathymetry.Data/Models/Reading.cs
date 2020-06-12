@@ -14,8 +14,8 @@ namespace Bathymetry.Data.Models
         public GGAMessage Location { get; set; }
         public int RecordNumber { get; set; }
         public DateTime RecordTime { get; set; }
-        public bool IsValid => (Depth != null && Location != null);
-
+        public bool InCorrectFormat => (Depth != null && Location != null);
+        public bool DepthReadingValid => !(Depth.F1 == 0 && Depth.F2 == 0);
 
         public double Latitude => Location.Latitude;
         public double Longitude => Location.Longitude;
