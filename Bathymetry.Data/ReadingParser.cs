@@ -13,14 +13,8 @@ namespace Bathymetry.Data
         public ReadingParser(NMEA0183Parser nmeaParser)
         {
             _nmeaParser = nmeaParser;
-            HasGps = true;
-            HasF1 = true;
-            HasF2 = true;
         }
 
-        public bool HasGps { get; set; }
-        public bool HasF1 { get; set; }
-        public bool HasF2 { get; set; }
         public Reading Parse(string inputText)
         {
             var lines = inputText.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
@@ -33,12 +27,11 @@ namespace Bathymetry.Data
                 {
                     if (line.StartsWith("$GPGGA"))
                     {
-                        reading.Location = (GGAMessage)ParseGps(line);
+                        reading.Location = (GGAMessage)ParseNmea(line);
                     }
                     else
                     {
-                        reading.Depth = ParseReading(line);
-
+                        reading.Depth = ParseDepth(line);
                     }
                 }
             }
@@ -50,7 +43,7 @@ namespace Bathymetry.Data
             return reading;
         }
 
-        private DepthInfo ParseReading(string readingLine)
+        private DepthInfo ParseDepth(string readingLine)
         {
             var info = new DepthInfo();
 
@@ -63,7 +56,7 @@ namespace Bathymetry.Data
             return info;
         }
 
-        private Nmea0183Message ParseGps(string gpsLine)
+        private Nmea0183Message ParseNmea(string gpsLine)
         {
             return _nmeaParser.Parse(gpsLine.AsSpan());
         }

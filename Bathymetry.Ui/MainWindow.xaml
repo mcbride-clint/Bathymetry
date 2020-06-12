@@ -7,7 +7,7 @@
         xmlns:DV="clr-namespace:System.Windows.Controls.DataVisualization;assembly=System.Windows.Controls.DataVisualization.Toolkit"  
         xmlns:DVC="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit" 
 		mc:Ignorable="d"
-		Title="MainWindow" Height="450" Width="800"        
+		Title="Bathymetry Recorder" Height="450" Width="800"        
         Background="Black">
 
     <Window.Resources>
@@ -50,6 +50,15 @@
     </Window.Resources>
 
     <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="File">
+                <MenuItem Header="Save" Click="Save_Click"/>
+                <MenuItem Header="Save As" Click="SaveAs_Click"/>
+                <MenuItem Header="Reset" Click="Reset_Click"/>
+                <Separator/>
+                <MenuItem Header="Close" Click="Close_Click"/>
+            </MenuItem>
+        </Menu>
         <StackPanel MaxWidth="100" MinWidth="80">
             <Button x:Name="StartStopButton" 
                     Click="StartStopButton_Click" 
@@ -76,6 +85,17 @@
                     Click="SaveDataButton_Click" 
                     Height="75"
                     Margin="5">Save Data</Button>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <StackPanel Margin="0 0 5 0">
+                    <TextBlock FontSize="18" Foreground="White" Text="F1"/>
+                    <TextBlock FontSize="18" Foreground="White" Text="F2"/>
+                </StackPanel>
+                <StackPanel Margin="0 0 5 0">
+                    <TextBlock FontSize="18" Foreground="White" x:Name="LastF1"/>
+                    <TextBlock FontSize="18" Foreground="White" x:Name="LastF2"/>
+                </StackPanel>
+            </StackPanel>
         </StackPanel>
 
         <TabControl>
