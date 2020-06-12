@@ -1,6 +1,5 @@
 ﻿using Bathymetry.Data;
 using Bathymetry.Data.Providers;
-using Boyd.NMEA.NMEA;
 using Microsoft.Extensions.DependencyInjection;
 using System.IO.Ports;
 using System.Windows;
@@ -20,7 +19,7 @@ namespace Bathymetry.Ui
             //setup our DI
             ServiceCollection = new ServiceCollection()
                 .AddLogging()
-                .AddSingleton<NMEA0183Parser>()
+                .AddSingleton<GpggaNmeaParser>()
                 .AddSingleton<ReadingParser>();
         }
 

@@ -4,7 +4,6 @@
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:local="clr-namespace:Bathymetry.Ui"
-        xmlns:DV="clr-namespace:System.Windows.Controls.DataVisualization;assembly=System.Windows.Controls.DataVisualization.Toolkit"  
         xmlns:DVC="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit" 
 		mc:Ignorable="d"
 		Title="Bathymetry Recorder" Height="450" Width="800"        
@@ -125,15 +124,8 @@
                         Auto-Scroll to Latest
                     </CheckBox>
 
-                    <ListBox x:Name="ReadingListBox" ItemTemplate="{StaticResource Reading}" IsSynchronizedWithCurrentItem="True" >
-                        <!--<ListBox.ItemTemplate>
-                        <DataTemplate DataType="">
-                            <Grid>
-                                <Label Content="{Binding}" />
-                            </Grid>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>-->
-                    </ListBox>
+                    <ListBox x:Name="ReadingListBox" 
+                             ItemTemplate="{StaticResource Reading}" />
                 </DockPanel>
             </TabItem>
             <TabItem Header="Location Plot">

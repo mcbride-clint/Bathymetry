@@ -100,7 +100,7 @@ namespace Bathymetry.Ui
             var sb = new StringBuilder();
 
             // Add Headers
-            sb.AppendLine("Record,Latitude,Units,NS,Longitude,Units,EW,Satellites,F1,F2,Units,Timestamp");
+            sb.AppendLine("Record,Latitude,Units,Longitude,Units,Satellites,F1,F2,Units,Timestamp");
 
             foreach (var reading in readingsToSave)
             {

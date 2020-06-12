@@ -1,6 +1,4 @@
 ﻿using Bathymetry.Data.Models;
-using Boyd.NMEA.NMEA;
-using Boyd.NMEA.NMEA.Messages;
 using System;
 using System.Linq;
 
@@ -8,9 +6,9 @@ namespace Bathymetry.Data
 {
     public class ReadingParser
     {
-        private readonly NMEA0183Parser _nmeaParser;
+        private readonly GpggaNmeaParser _nmeaParser;
 
-        public ReadingParser(NMEA0183Parser nmeaParser)
+        public ReadingParser(GpggaNmeaParser nmeaParser)
         {
             _nmeaParser = nmeaParser;
         }
@@ -56,9 +54,9 @@ namespace Bathymetry.Data
             return info;
         }
 
-        private Nmea0183Message ParseNmea(string gpsLine)
+        private GGAMessage ParseNmea(string gpsLine)
         {
-            return _nmeaParser.Parse(gpsLine.AsSpan());
+            return _nmeaParser.Parse(gpsLine);
         }
     }
 }
